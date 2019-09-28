@@ -34,7 +34,10 @@
             <div class="mb-1 navbar navbar-expand-lg navbar-dark lighten-1 sticky-top header-bg-color" th:insert="fragments/header :: header">The Static Header</div>
         </header>
         <nav class="nav-side-menu">
-            <div sec:authorize="hasRole('ROLE_ESTIMATOR')">
+            <div sec:authorize="isAuthenticated()">
+                <div th:insert="estimator/fragments/sidenav :: sidenav">The Static Sidenav</div>
+            </div>
+            <div sec:authorize="hasAnyRole('ROLE_ESTIMATOR')">
                 <div th:insert="estimator/fragments/sidenav :: sidenav">The Static Sidenav</div>
             </div>
             <div sec:authorize="hasRole('ROLE_TRADER')">
