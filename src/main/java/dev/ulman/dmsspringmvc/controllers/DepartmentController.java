@@ -1,6 +1,7 @@
 package dev.ulman.dmsspringmvc.controllers;
 
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import dev.ulman.dmsspringmvc.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,15 +21,18 @@ public class DepartmentController {
     }
 
     @GetMapping(path = "{id}")
+    @HystrixCommand(fallbackMethod = "getServiceDisableInfo")
     public String getDepartmentById(@PathVariable("id") long id, Model model){
 
         Department department = restTemplate.getForObject("http://DMS-GATEWAY/dms-api/departments/" + id, Department.class);
 
-        if (department == null)
-            return "error/error-404";
-
         model.addAttribute("department", department);
 
         return "department";
+    }
+
+    public String getServiceDisableInfo(@PathVariable("id") long id, Model model){
+
+        return "error/error";
     }
 }
